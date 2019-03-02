@@ -1,29 +1,47 @@
-
 package com.loyalty.model;
+
+import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.text.SimpleDateFormat;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "loyalty")
+@Table(name = "transaction")
+
 @EntityListeners(AuditingEntityListener.class)
-public class User {
+public class TransactionDetails {
+
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column
+	private long id;
 	@Column(name = "employeeid", nullable = false)
 	private long employeeid;
-	@Column(name = "nickname", nullable = false)
-	private String nickname;
-	@Column(name = "emailaddress", nullable = false)
-	private String emailaddress;
+	@Column(name = "transtype", nullable = false)
+	private String transtype;
 	@Column(name = "points", nullable = false)
 	private int points;
-	
-	public Long getEmployeeid() {
+	@Column(name = "transdate", nullable = false)
+	private String transdate;
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public long getEmployeeid() {
 		return employeeid;
 	}
 
@@ -31,20 +49,12 @@ public class User {
 		this.employeeid = employeeid;
 	}
 
-	public String getNickname() {
-		return nickname;
+	public String getTranstype() {
+		return transtype;
 	}
 
-	public void setNickname(String nickname) {
-		this.nickname = nickname;
-	}
-
-	public String getEmailaddress() {
-		return emailaddress;
-	}
-
-	public void setEmailaddress(String emailaddress) {
-		this.emailaddress = emailaddress;
+	public void setTranstype(String transtype) {
+		this.transtype = transtype;
 	}
 
 	public int getPoints() {
@@ -54,5 +64,12 @@ public class User {
 	public void setPoints(int points) {
 		this.points = points;
 	}
+
+	public String getTransdate() {
+		return transdate;
+	}
 	
+	public void setTransdate(String string) {
+		this.transdate = string;
+	}
 }
