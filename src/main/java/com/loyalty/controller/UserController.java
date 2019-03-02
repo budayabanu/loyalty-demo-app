@@ -4,8 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import javax.transaction.Transaction;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,6 +34,7 @@ public class UserController {
 			trans.setEmployeeid(user.getEmployeeid());
 			trans.setPoints(100);
 			trans.setTranstype("COLLECT");
+			trans.setTransdate(new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date()));
 			transRepository.save(trans);
 			return userRepository.save(user);
 		} else
@@ -81,7 +80,7 @@ public class UserController {
 		trans.setEmployeeid(user.getEmployeeid());
 		trans.setPoints(100);
 		trans.setTranstype("COLLECT");
-		trans.setTransdate(new SimpleDateFormat("dd-MM-yyyy.HH.mm.ss").format(new Date()));
+		trans.setTransdate(new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date()));
 		transRepository.save(trans);
 		return userRepository.save(user);
 	}
@@ -96,7 +95,7 @@ public class UserController {
 		trans.setEmployeeid(user.getEmployeeid());
 		trans.setPoints(100);
 		trans.setTranstype("REDEEM");
-		trans.setTransdate(new SimpleDateFormat("dd-MM-yyyy.HH.mm.ss").format(new Date()));
+		trans.setTransdate(new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date()));
 		transRepository.save(trans);
 		return userRepository.save(user);
 	}
