@@ -46,11 +46,11 @@ public class UserController {
 	
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
 	public User getUserById(@PathVariable long id) throws ResourceNotFoundException {
-	if (userRepository.findOne(id) == null) {
+	if (userRepository.findOne(id) != null) {
 		return userRepository.findOne(id);
 	}
 	 else
-			throw new ResourceNotFoundException("User not Found");
+		throw new ResourceNotFoundException("User not Found");
 	}
 
 	@RequestMapping(value = "/user/transaction/{id}", method = RequestMethod.GET)
