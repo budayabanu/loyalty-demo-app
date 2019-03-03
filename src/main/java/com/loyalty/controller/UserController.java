@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.loyalty.exception.ResourceNotFoundException;
 import com.loyalty.exception.ConflictException;
 import com.loyalty.model.TransactionDetails;
 import com.loyalty.model.User;
@@ -45,8 +45,12 @@ public class UserController {
 	// Read
 	
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
-	public User getUserById(@PathVariable long id) {
+	public User getUserById(@PathVariable long id) throws ResourceNotFoundException {
+	if (userRepository.findOne(id) == null) {
 		return userRepository.findOne(id);
+	}
+	 else
+			throw new ResourceNotFoundException("User not Found");
 	}
 
 	@RequestMapping(value = "/user/transaction/{id}", method = RequestMethod.GET)
