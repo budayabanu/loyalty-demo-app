@@ -11,6 +11,6 @@ import com.loyalty.model.TransactionDetails;
 @RepositoryRestResource
 public interface TransactionRepository extends CrudRepository<TransactionDetails, Long> {
 
-	@Query(value = "SELECT * FROM TRANSACTION WHERE EMPLOYEEID=?1", nativeQuery = true)
+	@Query(value = "SELECT * FROM transaction WHERE EMPLOYEEID=?1", nativeQuery = true)
 	public List<TransactionDetails> findTransactionsOfUser(long userId);
 }
