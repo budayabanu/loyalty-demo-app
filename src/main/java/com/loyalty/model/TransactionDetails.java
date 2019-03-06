@@ -1,8 +1,5 @@
 package com.loyalty.model;
 
-import java.sql.Timestamp;
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -10,7 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.text.SimpleDateFormat;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -32,6 +28,8 @@ public class TransactionDetails {
 	private int points;
 	@Column(name = "transdate", nullable = false)
 	private String transdate;
+	@Column(name = "location", nullable = true)
+	private String location;
 
 	public long getId() {
 		return id;
@@ -71,5 +69,13 @@ public class TransactionDetails {
 	
 	public void setTransdate(String string) {
 		this.transdate = string;
+	}
+	
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 }

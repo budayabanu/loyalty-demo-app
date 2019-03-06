@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import com.loyalty.exception.ResourceNotFoundException;
+
 import com.loyalty.exception.ConflictException;
+import com.loyalty.exception.ResourceNotFoundException;
 import com.loyalty.model.TransactionDetails;
 import com.loyalty.model.User;
 import com.loyalty.repository.TransactionRepository;
@@ -34,6 +35,7 @@ public class UserController {
 			trans.setEmployeeid(user.getEmployeeid());
 			trans.setPoints(100);
 			trans.setTranstype("COLLECT");
+			trans.setLocation("");
 			trans.setTransdate(new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date()));
 			transRepository.save(trans);
 			return userRepository.save(user);
@@ -50,7 +52,7 @@ public class UserController {
 		return userRepository.findOne(id);
 	}
 	 else
-		throw new ResourceNotFoundException("User not Found");
+			throw new ResourceNotFoundException("User not Found");
 	}
 
 	@RequestMapping(value = "/user/transaction/{id}", method = RequestMethod.GET)
@@ -74,9 +76,8 @@ public class UserController {
 	}
 
 	// Update
-
-	@RequestMapping(value = "/user/collect/{id}", method = RequestMethod.PUT)
-	public User collectPoints(@PathVariable long id) {
+	@RequestMapping(value = "/user/collect/{id}/{location}", method = RequestMethod.PUT)
+	public User collectPoints(@PathVariable long id,@PathVariable String location) {
 		User user=userRepository.findOne(id);
 		int points=user.getPoints()+100;
 		user.setPoints(points);
@@ -84,13 +85,14 @@ public class UserController {
 		trans.setEmployeeid(user.getEmployeeid());
 		trans.setPoints(100);
 		trans.setTranstype("COLLECT");
+		trans.setLocation(location);
 		trans.setTransdate(new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date()));
 		transRepository.save(trans);
 		return userRepository.save(user);
 	}
 
-	@RequestMapping(value = "/user/redeem/{id}", method = RequestMethod.PUT)
-	public User redeemPoints(@PathVariable long id) {
+	@RequestMapping(value = "/user/redeem/{id}/{location}", method = RequestMethod.PUT)
+	public User redeemPoints(@PathVariable long id,@PathVariable String location) {
 		User user=userRepository.findOne(id);
 		int points=user.getPoints()-100;
 		user.setPoints(points);
@@ -98,6 +100,7 @@ public class UserController {
 		TransactionDetails trans = new TransactionDetails();
 		trans.setEmployeeid(user.getEmployeeid());
 		trans.setPoints(100);
+		trans.setLocation(location);
 		trans.setTranstype("REDEEM");
 		trans.setTransdate(new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date()));
 		transRepository.save(trans);
