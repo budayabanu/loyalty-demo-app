@@ -31,11 +31,12 @@ public class UserController {
 
 		if (userRepository.findOne(user.getEmployeeid()) == null) {
 			user.setPoints(100);
+			user.setMessage("");
 			TransactionDetails trans = new TransactionDetails();
 			trans.setEmployeeid(user.getEmployeeid());
 			trans.setPoints(100);
 			trans.setTranstype("COLLECT");
-			trans.setLocation("");
+			trans.setLocation("Bonus Points for Regsitration");
 			trans.setTransdate(new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date()));
 			transRepository.save(trans);
 			return userRepository.save(user);
@@ -45,13 +46,12 @@ public class UserController {
 	}
 
 	// Read
-	
+
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
 	public User getUserById(@PathVariable long id) throws ResourceNotFoundException {
-	if (userRepository.findOne(id) != null) {
-		return userRepository.findOne(id);
-	}
-	 else
+		if (userRepository.findOne(id) != null) {
+			return userRepository.findOne(id);
+		} else
 			throw new ResourceNotFoundException("User not Found");
 	}
 
@@ -59,7 +59,7 @@ public class UserController {
 	public List<TransactionDetails> getUsertransById(@PathVariable long id) {
 		return transRepository.findTransactionsOfUser(id);
 	}
-	
+
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
 	public List<User> getAllUsers() {
 		return (List<User>) userRepository.findAll();
@@ -77,9 +77,10 @@ public class UserController {
 
 	// Update
 	@RequestMapping(value = "/user/collect/{id}/{location}", method = RequestMethod.PUT)
-	public User collectPoints(@PathVariable long id,@PathVariable String location) {
-		User user=userRepository.findOne(id);
-		int points=user.getPoints()+100;
+	public User collectPoints(@PathVariable long id, @PathVariable String location) {
+		User user = userRepository.findOne(id);
+		int points = user.getPoints() + 100;
+		user.setMessage("");
 		user.setPoints(points);
 		TransactionDetails trans = new TransactionDetails();
 		trans.setEmployeeid(user.getEmployeeid());
@@ -92,19 +93,53 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/user/redeem/{id}/{location}", method = RequestMethod.PUT)
-	public User redeemPoints(@PathVariable long id,@PathVariable String location) {
-		User user=userRepository.findOne(id);
-		int points=user.getPoints()-100;
-		user.setPoints(points);
-		user.setPoints(points);
-		TransactionDetails trans = new TransactionDetails();
-		trans.setEmployeeid(user.getEmployeeid());
-		trans.setPoints(100);
-		trans.setLocation(location);
-		trans.setTranstype("REDEEM");
-		trans.setTransdate(new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date()));
-		transRepository.save(trans);
+	public User redeemPoints(@PathVariable long id, @PathVariable String location) {
+		User user = userRepository.findOne(id);
+		
+		if (user.getPoints() >= 300) {
+			int points = user.getPoints() - 100;
+			user.setPoints(points);
+			user.setMessage("");
+			user.setPoints(points);
+			TransactionDetails trans = new TransactionDetails();
+			trans.setEmployeeid(user.getEmployeeid());
+			trans.setPoints(100);
+			trans.setLocation(location);
+			trans.setTranstype("REDEEM");
+			trans.setTransdate(new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date()));
+			transRepository.save(trans);
+		} else {
+			user.setMessage("Minimum 300 points required to Redeem");
+			
+		}
+		
 		return userRepository.save(user);
+	}
+
+	@RequestMapping(value = "/user/vouchers/{id}", method = RequestMethod.PUT)
+	public User getUserVouchers(@PathVariable long id) throws ResourceNotFoundException {
+		if (userRepository.findOne(id) != null) {
+			User user = userRepository.findOne(id);
+			TransactionDetails trans = new TransactionDetails();
+			trans.setEmployeeid(user.getEmployeeid());
+			int points = user.getPoints();
+			if (points <= 500) {
+				int voucherPoints = points / 2;
+				trans.setPoints(points);
+				user.setPoints(0);
+				trans.setLocation("Points are Vouchered");
+				trans.setTranstype("REDEEMED AS VOUCHERS");
+				trans.setTransdate(new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date()));
+				user.setMessage("Converting points to Vouchers of each :" + voucherPoints);
+				userRepository.save(user);
+				transRepository.save(trans);
+			} else {
+				user.setMessage("You have enough points to Redeem points cannot be Vouchered");
+				userRepository.save(user);
+			}
+			return user;
+		} else
+			throw new ResourceNotFoundException("User not Found");
 	}
 
 	// Delete

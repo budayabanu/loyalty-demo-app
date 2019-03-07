@@ -22,7 +22,9 @@ public class User {
 	private String emailaddress;
 	@Column(name = "points", nullable = false)
 	private int points;
-	
+	@Column(name = "message", nullable = true)
+	private String message;
+
 	public Long getEmployeeid() {
 		return employeeid;
 	}
@@ -54,5 +56,14 @@ public class User {
 	public void setPoints(int points) {
 		this.points = points;
 	}
+	
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
 	
 }
