@@ -131,13 +131,12 @@ public class UserController {
 				trans.setTranstype("VOUCHERS");
 				trans.setTransdate(new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date()));
 				user.setMessage("Converting points to Vouchers of each :" + voucherPoints);
-				userRepository.save(user);
 				transRepository.save(trans);
 			} else {
 				user.setMessage("You have enough points to Redeem points cannot be Vouchered");
-				userRepository.save(user);
+				
 			}
-			return user;
+			return userRepository.save(user);
 		} else
 			throw new ResourceNotFoundException("User not Found");
 	}
