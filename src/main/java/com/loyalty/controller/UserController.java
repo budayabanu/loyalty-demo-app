@@ -128,7 +128,7 @@ public class UserController {
 				trans.setPoints(points);
 				user.setPoints(0);
 				trans.setLocation("Points are Vouchered");
-				trans.setTranstype("REDEEMED AS VOUCHERS");
+				trans.setTranstype("VOUCHERS");
 				trans.setTransdate(new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date()));
 				user.setMessage("Converting points to Vouchers of each :" + voucherPoints);
 				userRepository.save(user);
