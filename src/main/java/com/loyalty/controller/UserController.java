@@ -32,12 +32,15 @@ public class UserController {
 		if (userRepository.findOne(user.getEmployeeid()) == null) {
 			user.setPoints(100);
 			user.setMessage("");
+			user.setTotalcollect(transRepository.sumOfCollect(user.getEmployeeid()));
+			user.setTotalcollect(transRepository.sumOfRedeem(user.getEmployeeid()));
 			TransactionDetails trans = new TransactionDetails();
 			trans.setEmployeeid(user.getEmployeeid());
 			trans.setPoints(100);
 			trans.setTranstype("COLLECT");
-			trans.setLocation("Bonus Points for Regsitration");
+			trans.setLocation("Bonus Points for Registration");
 			trans.setTransdate(new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date()));
+			
 			transRepository.save(trans);
 			return userRepository.save(user);
 		} else
@@ -82,6 +85,8 @@ public class UserController {
 		int points = user.getPoints() + 100;
 		user.setMessage("");
 		user.setPoints(points);
+		user.setTotalcollect(transRepository.sumOfCollect(user.getEmployeeid()));
+		user.setTotalcollect(transRepository.sumOfRedeem(user.getEmployeeid()));
 		TransactionDetails trans = new TransactionDetails();
 		trans.setEmployeeid(user.getEmployeeid());
 		trans.setPoints(100);
@@ -99,6 +104,8 @@ public class UserController {
 		if (user.getPoints() >= 300) {
 			int points = user.getPoints() - 100;
 			user.setPoints(points);
+			user.setTotalcollect(transRepository.sumOfCollect(user.getEmployeeid()));
+			user.setTotalcollect(transRepository.sumOfRedeem(user.getEmployeeid()));
 			user.setMessage("");
 			user.setPoints(points);
 			TransactionDetails trans = new TransactionDetails();
@@ -108,6 +115,7 @@ public class UserController {
 			trans.setTranstype("REDEEM");
 			trans.setTransdate(new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date()));
 			transRepository.save(trans);
+			
 		} else {
 			user.setMessage("Minimum 300 points required to Redeem");
 			
@@ -131,12 +139,13 @@ public class UserController {
 				trans.setTranstype("VOUCHERS");
 				trans.setTransdate(new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date()));
 				user.setMessage("Converting points to Vouchers of each :" + voucherPoints);
+				userRepository.save(user);
 				transRepository.save(trans);
 			} else {
 				user.setMessage("You have enough points to Redeem points cannot be Vouchered");
-				
+				userRepository.save(user);
 			}
-			return userRepository.save(user);
+			return user;
 		} else
 			throw new ResourceNotFoundException("User not Found");
 	}

@@ -24,7 +24,11 @@ public class User {
 	private int points;
 	@Column(name = "message", nullable = true)
 	private String message;
-
+	@Column (name = "totalcollect", nullable = false)
+	private long totalcollect;
+	@Column (name = "totalredeem", nullable = false)
+	private long totalredeem;
+	
 	public Long getEmployeeid() {
 		return employeeid;
 	}
@@ -63,6 +67,22 @@ public class User {
 
 	public void setMessage(String message) {
 		this.message = message;
+	}
+
+	public long getTotalcollect() {
+		return totalcollect;
+	}
+
+	public void setTotalcollect(long totalcollect) {
+		this.totalcollect = totalcollect;
+	}
+
+	public long getTotalredeem() {
+		return totalredeem;
+	}
+
+	public void setTotalredeem(long totalredeem) {
+		this.totalredeem = totalredeem;
 	}
 
 	

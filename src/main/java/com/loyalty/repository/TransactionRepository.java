@@ -13,4 +13,10 @@ public interface TransactionRepository extends CrudRepository<TransactionDetails
 
 	@Query(value = "SELECT * FROM transaction WHERE EMPLOYEEID=?1", nativeQuery = true)
 	public List<TransactionDetails> findTransactionsOfUser(long userId);
+	
+	@Query(value = "SELECT SUM(POINTS) FROM transaction WHERE EMPLOYEEID=?1 and TRANSTYPE='COLLECT'", nativeQuery = true)
+	public long sumOfCollect(long userId);
+	
+	@Query(value = "SELECT SUM(POINTS) FROM transaction WHERE EMPLOYEEID=?1 and TRANSTYPE='REDEEM'", nativeQuery = true)
+	public long sumOfRedeem(long userId);
 }
