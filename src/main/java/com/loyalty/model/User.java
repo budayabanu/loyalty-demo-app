@@ -25,9 +25,9 @@ public class User {
 	@Column(name = "message", nullable = true)
 	private String message;
 	@Column (name = "totalcollect", nullable = false)
-	private long totalcollect;
+	private int totalcollect;
 	@Column (name = "totalredeem", nullable = false)
-	private long totalredeem;
+	private int totalredeem;
 	
 	public Long getEmployeeid() {
 		return employeeid;
@@ -69,19 +69,19 @@ public class User {
 		this.message = message;
 	}
 
-	public long getTotalcollect() {
+	public int getTotalcollect() {
 		return totalcollect;
 	}
 
-	public void setTotalcollect(long totalcollect) {
+	public void setTotalcollect(int totalcollect) {
 		this.totalcollect = totalcollect;
 	}
 
-	public long getTotalredeem() {
+	public int getTotalredeem() {
 		return totalredeem;
 	}
 
-	public void setTotalredeem(long totalredeem) {
+	public void setTotalredeem(int totalredeem) {
 		this.totalredeem = totalredeem;
 	}
 

@@ -32,16 +32,16 @@ public class UserController {
 		if (userRepository.findOne(user.getEmployeeid()) == null) {
 			user.setPoints(100);
 			user.setMessage("");
-			user.setTotalcollect(transRepository.sumOfCollect(user.getEmployeeid()));
-			user.setTotalcollect(transRepository.sumOfRedeem(user.getEmployeeid()));
 			TransactionDetails trans = new TransactionDetails();
 			trans.setEmployeeid(user.getEmployeeid());
 			trans.setPoints(100);
 			trans.setTranstype("COLLECT");
 			trans.setLocation("Bonus Points for Registration");
 			trans.setTransdate(new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date()));
-			
 			transRepository.save(trans);
+			int collectedPoints=transRepository.sumOfCollect(user.getEmployeeid());
+			user.setTotalcollect(collectedPoints);
+			user.setTotalredeem(0);
 			return userRepository.save(user);
 		} else
 			throw new ConflictException("User Already Exists:" + user.getEmployeeid());
@@ -85,8 +85,6 @@ public class UserController {
 		int points = user.getPoints() + 100;
 		user.setMessage("");
 		user.setPoints(points);
-		user.setTotalcollect(transRepository.sumOfCollect(user.getEmployeeid()));
-		user.setTotalcollect(transRepository.sumOfRedeem(user.getEmployeeid()));
 		TransactionDetails trans = new TransactionDetails();
 		trans.setEmployeeid(user.getEmployeeid());
 		trans.setPoints(100);
@@ -94,6 +92,11 @@ public class UserController {
 		trans.setLocation(location);
 		trans.setTransdate(new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date()));
 		transRepository.save(trans);
+		int redeemedPoints=transRepository.sumOfRedeem(user.getEmployeeid());
+		int collectedPoints=transRepository.sumOfCollect(user.getEmployeeid());
+		System.out.println("collectedPoints"+collectedPoints);
+		user.setTotalcollect(collectedPoints);
+		user.setTotalredeem(redeemedPoints);
 		return userRepository.save(user);
 	}
 
@@ -115,6 +118,10 @@ public class UserController {
 			trans.setTranstype("REDEEM");
 			trans.setTransdate(new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date()));
 			transRepository.save(trans);
+			int redeemedPoints=transRepository.sumOfRedeem(user.getEmployeeid());
+			int collectedPoints=transRepository.sumOfCollect(user.getEmployeeid());
+			user.setTotalredeem(redeemedPoints);
+			user.setTotalcollect(collectedPoints);
 			
 		} else {
 			user.setMessage("Minimum 300 points required to Redeem");
