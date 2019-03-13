@@ -11,10 +11,10 @@ import com.loyalty.model.User;
 @RepositoryRestResource
 public interface UserRepository extends CrudRepository<User, Long> {
 
-	@Query(value = "SELECT * FROM loyalty ORDER BY POINTS DESC", nativeQuery = true)
+	@Query(value = "SELECT * FROM LOYALTY ORDER BY POINTS DESC", nativeQuery = true)
 	public 	List<User> findTopUsers();
 	
-	@Query(value = "SELECT count(*) FROM loyalty", nativeQuery = true)
+	@Query(value = "SELECT count(*) FROM LOYALTY", nativeQuery = true)
 	public 	long usersCount();
 	
 }
