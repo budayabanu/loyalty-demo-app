@@ -94,7 +94,6 @@ public class UserController {
 		transRepository.save(trans);
 		int redeemedPoints=transRepository.sumOfRedeem(user.getEmployeeid());
 		int collectedPoints=transRepository.sumOfCollect(user.getEmployeeid());
-		System.out.println("collectedPoints"+collectedPoints);
 		user.setTotalcollect(collectedPoints);
 		user.setTotalredeem(redeemedPoints);
 		return userRepository.save(user);
@@ -145,9 +144,11 @@ public class UserController {
 				trans.setLocation("Points are Vouchered");
 				trans.setTranstype("VOUCHERS");
 				trans.setTransdate(new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").format(new Date()));
-				user.setMessage("Converting points to Vouchers of each :" + voucherPoints);
-				userRepository.save(user);
 				transRepository.save(trans);
+				user.setMessage("Converting points to Vouchers of each :" + voucherPoints);
+				int redeemedPoints=transRepository.sumOfRedeem(user.getEmployeeid());
+				user.setTotalredeem(redeemedPoints);
+				userRepository.save(user);
 			} else {
 				user.setMessage("You have enough points to Redeem points cannot be Vouchered");
 				userRepository.save(user);
