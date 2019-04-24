@@ -25,7 +25,7 @@ public class UserController {
 	@Autowired
 	TransactionRepository transRepository;
 
-	// Create User API (POST)
+	// Create User API (POST) - test
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
 	public User createUser(@RequestBody User user) throws ConflictException {
 
